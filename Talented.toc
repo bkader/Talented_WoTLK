@@ -1,0 +1,29 @@
+## Interface: 30300
+## Title: Talented
+## Notes: The Talent Template Editor
+## Author: Jerry (Kader Edition)
+## Version: v2.4.7
+## OptionalDeps: Ace3
+## SavedVariables: TalentedDB
+## LoadManagers: Talented_Loader AddonLoader
+## X-Category: Interface Enhancements
+## X-LoadOn-Execute: local N = "ToggleTalentFrame" local P = _G[N] local function f() if _G[N] == f then _G[N] = P end local T = "Talented" AddonLoader:LoadAddOn(T) local t = _G[T] if t then t[N](t) else P() end end _G[N] = f
+## X-LoadOn-Execute2: local N = "ToggleGlyphFrame" local P = _G[N] local function f() if _G[N] == f then _G[N] = P end local T = "Talented" AddonLoader:LoadAddOn(T) local t = _G[T] if t then t[N](t) else P() end end _G[N] = f
+## X-LoadOn-Execute3: UIParent:UnregisterEvent"USE_GLYPH" UIParent:UnregisterEvent"CONFIRM_TALENT_WIPE" TalentMicroButton:SetScript("OnClick", function () ToggleTalentFrame() end)
+## X-LoadOn-Slash: /talented
+## X-LoadOn-Event: INSPECT_TALENT_READY USE_GLYPH CONFIRM_TALENT_WIPE
+## X-LoadOn-INSPECT_TALENT_READY: if IsAddOnLoaded"Talented" or not InspectFrame or not InspectFrame:IsShown() then return end AddonLoader:LoadAddOn"Talented" if Talented then Talented:INSPECT_TALENT_READY() end
+## X-LoadOn-USE_GLYPH: if IsAddOnLoaded"Talented" then return end AddonLoader:LoadAddOn"Talented" if Talented then Talented:GLYPHFRAME_OPEN() end
+## X-LoadOn-CONFIRM_TALENT_WIPE: if IsAddOnLoaded"Talented" then return end AddonLoader:LoadAddOn"Talented" if Talented then Talented:CONFIRM_TALENT_WIPE() end
+## X-Curse-Packaged-Version: v2.4.6c-release
+## X-Curse-Project-Name: Talented
+## X-Curse-Project-ID: talented
+## X-Curse-Repository-ID: wow/talented/mainline
+Libs\Libs.xml
+Locales\Locales.xml
+Talented.lua
+Options.lua
+Data.lua
+Exporters.lua
+Ui.lua
+Glyphs.lua
