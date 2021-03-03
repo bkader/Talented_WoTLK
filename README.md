@@ -15,4 +15,9 @@ Instead of those non-working official sites (_wowhead, wowdb, mmo-champion .. et
 3. Altervisa.org
 4. TrueWoW.org
 
-Enjoy!
+## Install:
+
+1. Download the package.
+2. Extract it inside your `Interface\AddOns` folder.
+3. Rename it to `Talented`.
+4. Enjoy!
