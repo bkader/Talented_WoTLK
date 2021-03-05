@@ -555,8 +555,13 @@ end
 
 -------------------------------------------------------------------------------
 
+function Talented:CreateGlyphFrame()
+	Talented_CreateGlyphFrame()
+    _G.TalentedGlyphs:Update()
+end
+
 function Talented:OpenGlyphFrame()
-    Talented_CreateGlyphFrame()
+	Talented_CreateGlyphFrame()
     _G.TalentedGlyphs:Update()
     _G.TalentedGlyphs:Show()
 end

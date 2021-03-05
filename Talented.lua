@@ -264,6 +264,7 @@ do
         self:SecureHook("UpdateMicroButtons")
         self:CheckHookInspectUI()
 
+        self:RegisterEvent("PLAYER_ENTERING_WORLD")
         UIParent:UnregisterEvent("USE_GLYPH")
         UIParent:UnregisterEvent("CONFIRM_TALENT_WIPE")
         self:RegisterEvent("USE_GLYPH")
@@ -278,6 +279,20 @@ do
         UIParent:RegisterEvent("USE_GLYPH")
         UIParent:RegisterEvent("CONFIRM_TALENT_WIPE")
     end
+
+	function Talented:PLAYER_ENTERING_WORLD()
+		if ElvUI then
+			local E = select(1, unpack(ElvUI))
+
+			-- spec tabs
+			local AS = E:GetModule("AddOnSkins")
+			if AS then AS.addons["talented_spectabs"] = 1 end
+
+			-- glyph frame
+			self:CreateGlyphFrame()
+			E.callbacks:Fire("Talented_GlyphFrame")
+		end
+	end
 
     function Talented:PLAYER_TALENT_UPDATE()
         self:UpdatePlayerSpecs()
