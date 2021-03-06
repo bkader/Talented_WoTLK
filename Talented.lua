@@ -328,7 +328,7 @@ do
         if self.base and self.base:IsShown() then
             button:SetButtonState("PUSHED", 1)
         else
-            button:SetButtonState "NORMAL"
+            button:SetButtonState("NORMAL")
         end
     end
 

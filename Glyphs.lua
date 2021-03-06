@@ -362,7 +362,7 @@ do
         self:StopAnimations()
         local b = Talented.base
         if b and b.bglyphs then
-            b.bglyphs:SetButtonState "NORMAL"
+            b.bglyphs:SetButtonState("NORMAL")
         end
     end
 

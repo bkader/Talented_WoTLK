@@ -197,21 +197,21 @@ do
 
         local b = MakeButton(parent)
         b:SetText(L["Actions"])
-        b:SetSize(max(110, b:GetTextWidth() + 22), 22)
+        b:SetSize(max(100, b:GetTextWidth() + 22), 22)
         b:SetScript("OnClick", function(self) Talented:OpenActionMenu(self) end)
-        b:SetPoint("TOPLEFT", 14, -4)
+        b:SetPoint("TOPLEFT", 5, -4)
         parent.bactions = b
 
         b = MakeButton(parent)
         b:SetText(L["Templates"])
-        b:SetSize(max(110, b:GetTextWidth() + 22), 22)
+        b:SetSize(max(100, b:GetTextWidth() + 22), 22)
         b:SetScript("OnClick", function(self) Talented:OpenTemplateMenu(self) end)
         b:SetPoint("LEFT", parent.bactions, "RIGHT", 14, 0)
         parent.bmode = b
 
         b = MakeButton(parent)
         b:SetText(GLYPHS)
-        b:SetSize(max(110, b:GetTextWidth() + 22), 22)
+        b:SetSize(max(100, b:GetTextWidth() + 22), 22)
         b:SetScript("OnClick", function(self) Talented:ToggleGlyphFrame() end)
         b:SetPoint("LEFT", parent.bmode, "RIGHT", 14, 0)
         parent.bglyphs = b
@@ -219,7 +219,7 @@ do
         local e = CreateFrame("EditBox", nil, parent, "InputBoxTemplate")
         e:SetFontObject(ChatFontNormal)
         e:SetTextColor(GREEN_FONT_COLOR.r, GREEN_FONT_COLOR.g, GREEN_FONT_COLOR.b)
-        e:SetSize(200, 13)
+        e:SetSize(185, 13)
         e:SetAutoFocus(false)
         e:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
         e:SetScript("OnEditFocusLost", function(self) self:SetText(Talented.template.name) end)
@@ -236,7 +236,7 @@ do
 
         local targetname = parent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         targetname:SetJustifyH("LEFT")
-        targetname:SetSize(200, 13)
+        targetname:SetSize(185, 13)
         targetname:SetPoint("LEFT", parent.bglyphs, "RIGHT", 14, 0)
         parent.targetname = targetname
 
@@ -406,9 +406,7 @@ do
             PlaySound "TalentScreenClose"
             if Talented.mode == "apply" then
                 Talented:SetMode(Talented:GetDefaultMode())
-                Talented:Print(
-                    L["Error! Talented window has been closed during template application. Please reapply later."]
-                )
+                Talented:Print(L["Error! Talented window has been closed during template application. Please reapply later."])
                 Talented:EnableUI(true)
             end
             Talented:CloseMenu()
