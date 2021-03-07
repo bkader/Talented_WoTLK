@@ -397,171 +397,172 @@ do
     end
 
     function Talented_CreateGlyphFrame()
-      if _G.TalentedGlyphs then return end
-      local frame = CreateFrame("Frame", "TalentedGlyphs", UIParent)
+        if _G.TalentedGlyphs then
+            return
+        end
+        local frame = CreateFrame("Frame", "TalentedGlyphs", UIParent)
 
-      frame:Hide()
-      frame:SetFrameStrata("DIALOG")
-      frame:SetSize(384, 512)
-      frame:EnableMouse(true)
-      frame:SetToplevel(true)
-      frame:SetHitRectInsets(0, 30, 0, 70)
+        frame:Hide()
+        frame:SetFrameStrata("DIALOG")
+        frame:SetSize(384, 512)
+        frame:EnableMouse(true)
+        frame:SetToplevel(true)
+        frame:SetHitRectInsets(0, 30, 0, 70)
 
-      local t = frame:CreateTexture(nil, "BORDER")
-      t:SetTexture("Interface\\Spellbook\\UI-GlyphFrame")
-      t:SetSize(352, 441)
-      t:SetPoint("TOPLEFT")
-      t:SetTexCoord(0, 0.6875, 0, 0.861328125)
-      frame.background = t
+        local t = frame:CreateTexture(nil, "BORDER")
+        t:SetTexture("Interface\\Spellbook\\UI-GlyphFrame")
+        t:SetSize(352, 441)
+        t:SetPoint("TOPLEFT")
+        t:SetTexCoord(0, 0.6875, 0, 0.861328125)
+        frame.background = t
 
-      local p = frame:CreateTexture(nil, "BACKGROUND")
-      p:SetSize(64, 64)
-      p:SetPoint("TOPLEFT", 5, -4)
-      frame.portrait = p
+        local p = frame:CreateTexture(nil, "BACKGROUND")
+        p:SetSize(64, 64)
+        p:SetPoint("TOPLEFT", 5, -4)
+        frame.portrait = p
 
-      local title = frame:CreateFontString(nil, "ARTWORK")
-      title:SetFontObject(GameFontNormal)
-      title:SetText(GLYPHS)
-      title:SetPoint("TOP", 0, -17)
-      frame.title = title
+        local title = frame:CreateFontString(nil, "ARTWORK")
+        title:SetFontObject(GameFontNormal)
+        title:SetText(GLYPHS)
+        title:SetPoint("TOP", 0, -17)
+        frame.title = title
 
-      local glow = frame:CreateTexture(nil, "OVERLAY")
-      glow:Hide()
-      glow:SetTexture("Interface\\Spellbook\\UI-GlyphFrame-Glow")
-      glow:SetBlendMode("ADD")
-      glow:SetSize(352, 441)
-      glow:SetPoint("TOPLEFT", -9, -38)
-      glow:SetTexCoord(0, 0.6875, 0, 0.861328125)
-      frame.glow = glow
+        local glow = frame:CreateTexture(nil, "OVERLAY")
+        glow:Hide()
+        glow:SetTexture("Interface\\Spellbook\\UI-GlyphFrame-Glow")
+        glow:SetBlendMode("ADD")
+        glow:SetSize(352, 441)
+        glow:SetPoint("TOPLEFT", -9, -38)
+        glow:SetTexCoord(0, 0.6875, 0, 0.861328125)
+        frame.glow = glow
 
-      local animGroup = glow:CreateAnimationGroup()
-      local alpha = animGroup:CreateAnimation("Alpha")
-      alpha:SetChange(1)
-      alpha:SetDuration(0.1)
-      alpha:SetOrder(1)
-      alpha = animGroup:CreateAnimation("Alpha")
-      alpha:SetChange(-1)
-      alpha:SetDuration(1.5)
-      alpha:SetOrder(2)
-      glow.anim = animGroup
+        local animGroup = glow:CreateAnimationGroup()
+        local alpha = animGroup:CreateAnimation("Alpha")
+        alpha:SetChange(1)
+        alpha:SetDuration(0.1)
+        alpha:SetOrder(1)
+        alpha = animGroup:CreateAnimation("Alpha")
+        alpha:SetChange(-1)
+        alpha:SetDuration(1.5)
+        alpha:SetOrder(2)
+        glow.anim = animGroup
 
-      animGroup:SetScript("OnStop", GlowAnimation_Hide)
-      animGroup:SetScript("OnFinished", GlowAnimation_Hide)
+        animGroup:SetScript("OnStop", GlowAnimation_Hide)
+        animGroup:SetScript("OnFinished", GlowAnimation_Hide)
 
-      frame:RegisterEvent("GLYPH_ADDED")
-      frame:RegisterEvent("GLYPH_REMOVED")
-      frame:RegisterEvent("GLYPH_UPDATED")
-      frame:RegisterEvent("USE_GLYPH")
-      frame:RegisterEvent("PLAYER_LEVEL_UP")
-      frame:RegisterEvent("UNIT_PORTRAIT_UPDATE")
-      frame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+        frame:RegisterEvent("GLYPH_ADDED")
+        frame:RegisterEvent("GLYPH_REMOVED")
+        frame:RegisterEvent("GLYPH_UPDATED")
+        frame:RegisterEvent("USE_GLYPH")
+        frame:RegisterEvent("PLAYER_LEVEL_UP")
+        frame:RegisterEvent("UNIT_PORTRAIT_UPDATE")
+        frame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 
-      frame:SetScript("OnEvent", GlyphFrame_OnEvent)
-      frame:SetScript("OnEnter", GlyphFrame_OnEnter)
-      frame:SetScript("OnLeave", function(self) SetCursor(nil) end)
-      frame:SetScript("OnShow", GlyphFrame_OnShow)
-      frame:SetScript("OnHide", GlyphFrame_OnHide)
-      frame:SetScript("OnUpdate", GlyphFrame_OnUpdate)
+        frame:SetScript("OnEvent", GlyphFrame_OnEvent)
+        frame:SetScript("OnEnter", GlyphFrame_OnEnter)
+        frame:SetScript("OnLeave", function(self) SetCursor(nil) end)
+        frame:SetScript("OnShow", GlyphFrame_OnShow)
+        frame:SetScript("OnHide", GlyphFrame_OnHide)
+        frame:SetScript("OnUpdate", GlyphFrame_OnUpdate)
 
-      frame.Update = function(self)
-          if self.group > GetNumTalentGroups() then
-              self.group = GetActiveTalentGroup()
-          end
-          for _, glyph in ipairs(self.glyphs) do
-              glyph:Update()
-          end
-          self:UpdateGroup()
-      end
+        frame.Update = function(self)
+            if self.group > GetNumTalentGroups() then
+                self.group = GetActiveTalentGroup()
+            end
+            for _, glyph in ipairs(self.glyphs) do
+                glyph:Update()
+            end
+            self:UpdateGroup()
+        end
 
-      frame.UpdateGroup = function(self)
-          local cb, alt = self.checkbox, GetNumTalentGroups() > 1
-          if alt then
-              local talentGroup = GetActiveTalentGroup()
-              self.title:SetText(talentGroup == 1 and TALENT_SPEC_PRIMARY_GLYPH or TALENT_SPEC_SECONDARY_GLYPH)
-              cb:Show()
-              local checked = (self.group ~= talentGroup)
-              cb:SetChecked(checked)
-              SetDesaturation(self.background, checked)
-          else
-              cb:Hide()
-          end
-      end
+        frame.UpdateGroup = function(self)
+            local cb, alt = self.checkbox, GetNumTalentGroups() > 1
+            if alt then
+                local talentGroup = GetActiveTalentGroup()
+                self.title:SetText(talentGroup == 1 and TALENT_SPEC_PRIMARY_GLYPH or TALENT_SPEC_SECONDARY_GLYPH)
+                cb:Show()
+                local checked = (self.group ~= talentGroup)
+                cb:SetChecked(checked)
+                SetDesaturation(self.background, checked)
+            else
+                cb:Hide()
+            end
+        end
 
-      frame.OnMouseDown = GlyphFrame_StopAnimations
-      frame.OnMouseUp = GlyphFrame_StartAnimations
-      frame.StartAnimations = GlyphFrame_StartAnimations
-      frame.StopAnimations = GlyphFrame_StopAnimations
+        frame.OnMouseDown = GlyphFrame_StopAnimations
+        frame.OnMouseUp = GlyphFrame_StartAnimations
+        frame.StartAnimations = GlyphFrame_StartAnimations
+        frame.StopAnimations = GlyphFrame_StopAnimations
 
-      frame.Glow = function(self)
-          local glow = self.glow
-          glow:SetAlpha(0)
-          glow:Show()
-          glow.anim:Play()
-      end
+        frame.Glow = function(self)
+            local glow = self.glow
+            glow:SetAlpha(0)
+            glow:Show()
+            glow.anim:Play()
+        end
 
-      frame.glyphs = {}
-      frame.group = GetActiveTalentGroup()
+        frame.glyphs = {}
+        frame.group = GetActiveTalentGroup()
 
-      for id, position in ipairs(GLYPH_POSITIONS) do
-          local glyph = Talented_MakeGlyph(frame, id)
-          glyph.sparkle = MakeSparkleAnimation(frame, unpack(position, 4))
-          glyph:SetPoint(unpack(position, 1, 3))
-          frame.glyphs[id] = glyph
-      end
+        for id, position in ipairs(GLYPH_POSITIONS) do
+            local glyph = Talented_MakeGlyph(frame, id)
+            glyph.sparkle = MakeSparkleAnimation(frame, unpack(position, 4))
+            glyph:SetPoint(unpack(position, 1, 3))
+            frame.glyphs[id] = glyph
+        end
 
-      frame:SetFrameLevel(5)
+        frame:SetFrameLevel(5)
 
-      local close = Talented:CreateCloseButton(frame)
-      frame.close = close
-      close:ClearAllPoints()
-      close:SetPoint("TOPRIGHT", -28, -9)
+        local close = Talented:CreateCloseButton(frame)
+        frame.close = close
+        close:ClearAllPoints()
+        close:SetPoint("TOPRIGHT", -28, -9)
 
-      local cb = CreateFrame("Checkbutton", nil, frame)
-      frame.checkbox = cb
+        local cb = CreateFrame("Checkbutton", nil, frame)
+        frame.checkbox = cb
 
-      cb:SetSize(20, 20)
+        cb:SetSize(20, 20)
 
-      local label = cb:CreateFontString(nil, "BACKGROUND", "GameFontNormal")
-      label:SetJustifyH("LEFT")
-      label:SetSize(400, 20)
-      label:SetPoint("LEFT", cb, "RIGHT", 1, 1)
-      cb.label = label
+        local label = cb:CreateFontString(nil, "BACKGROUND", "GameFontNormal")
+        label:SetJustifyH("LEFT")
+        label:SetSize(400, 20)
+        label:SetPoint("LEFT", cb, "RIGHT", 1, 1)
+        cb.label = label
 
-      cb:SetNormalTexture(makeTexture(cb, "Interface\\Buttons\\UI-CheckBox-Up"))
-      cb:SetPushedTexture(makeTexture(cb, "Interface\\Buttons\\UI-CheckBox-Down"))
-      cb:SetDisabledTexture(makeTexture(cb, "Interface\\Buttons\\UI-CheckBox-Check-Disabled"))
-      cb:SetCheckedTexture(makeTexture(cb, "Interface\\Buttons\\UI-CheckBox-Check"))
-      cb:SetHighlightTexture(makeTexture(cb, "Interface\\Buttons\\UI-CheckBox-Highlight", "ADD"))
-      cb:SetScript("OnClick", function(self)
-          local talentGroup = GetActiveTalentGroup()
-          if self:GetChecked() then
-              talentGroup = 3 - talentGroup
-          end
-          local gframe = self:GetParent()
-          gframe.group = talentGroup
-          gframe:Update()
-      end)
-      cb.label:SetText(L["View glyphs of alternate Spec"])
-      cb:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 18, 82)
-      cb:SetFrameLevel(frame:GetFrameLevel() + 2)
+        cb:SetNormalTexture(makeTexture(cb, "Interface\\Buttons\\UI-CheckBox-Up"))
+        cb:SetPushedTexture(makeTexture(cb, "Interface\\Buttons\\UI-CheckBox-Down"))
+        cb:SetDisabledTexture(makeTexture(cb, "Interface\\Buttons\\UI-CheckBox-Check-Disabled"))
+        cb:SetCheckedTexture(makeTexture(cb, "Interface\\Buttons\\UI-CheckBox-Check"))
+        cb:SetHighlightTexture(makeTexture(cb, "Interface\\Buttons\\UI-CheckBox-Highlight", "ADD"))
+        cb:SetScript("OnClick", function(self)
+            local talentGroup = GetActiveTalentGroup()
+            if self:GetChecked() then
+                talentGroup = 3 - talentGroup
+            end
+            local gframe = self:GetParent()
+            gframe.group = talentGroup
+            gframe:Update()
+        end)
+        cb.label:SetText(L["View glyphs of alternate Spec"])
+        cb:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 18, 82)
+        cb:SetFrameLevel(frame:GetFrameLevel() + 2)
 
-      Talented:LoadFramePosition(frame)
-      Talented:SetFrameLock(frame)
+        Talented:LoadFramePosition(frame)
+        Talented:SetFrameLock(frame)
 
-      UISpecialFrames[#UISpecialFrames + 1] = "TalentedGlyphs"
+        UISpecialFrames[#UISpecialFrames + 1] = "TalentedGlyphs"
     end
-
 end
 
 -------------------------------------------------------------------------------
 
 function Talented:CreateGlyphFrame()
-	Talented_CreateGlyphFrame()
+    Talented_CreateGlyphFrame()
     _G.TalentedGlyphs:Update()
 end
 
 function Talented:OpenGlyphFrame()
-	Talented_CreateGlyphFrame()
+    Talented_CreateGlyphFrame()
     _G.TalentedGlyphs:Update()
     _G.TalentedGlyphs:Show()
 end
