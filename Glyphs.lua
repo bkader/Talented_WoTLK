@@ -478,10 +478,9 @@ do
         frame.UpdateGroup = function(self)
             local cb, alt = self.checkbox, GetNumTalentGroups() > 1
             if alt then
-                local talentGroup = GetActiveTalentGroup()
-                self.title:SetText(talentGroup == 1 and TALENT_SPEC_PRIMARY_GLYPH or TALENT_SPEC_SECONDARY_GLYPH)
+                self.title:SetText(self.group ~= 1 and TALENT_SPEC_SECONDARY_GLYPH or TALENT_SPEC_PRIMARY_GLYPH)
                 cb:Show()
-                local checked = (self.group ~= talentGroup)
+                local checked = (self.group ~= GetActiveTalentGroup())
                 cb:SetChecked(checked)
                 SetDesaturation(self.background, checked)
             else
