@@ -285,7 +285,7 @@ do
 			local E = select(1, unpack(ElvUI))
 
 			-- spec tabs
-			local AS = E:GetModule("AddOnSkins")
+			local AS = E:GetModule("AddOnSkins", true)
 			if AS then AS.addons["talented_spectabs"] = 1 end
 
 			-- glyph frame
