@@ -17,7 +17,6 @@ Instead of those non-working official sites (_wowhead, wowdb, mmo-champion .. et
 
 ## Install:
 
-1. Download the package.
-2. Extract it inside your `Interface\AddOns` folder.
-3. Rename it to `Talented`.
-4. Enjoy!
+1. [Download the package.](https://github.com/bkader/Talented_WoTLK/archive/refs/heads/main.zip)
+2. Open the archive, then open folder Talented_WoTLK-main, extract the single folder to `Interface\AddOns`.
+3. Enjoy!
