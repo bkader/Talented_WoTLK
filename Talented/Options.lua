@@ -12,7 +12,8 @@ Talented.defaults = {
         scale = 1,
         add_bottom_offset = true,
         framepos = {},
-        glyph_on_talent_swap = "active"
+        glyph_on_talent_swap = "active",
+        restore_bars = false
     },
     global = {templates = {}},
     char = {targets = {}}
@@ -33,7 +34,7 @@ function Talented:GetOption(info)
 end
 
 function Talented:MustNotConfirmLearn()
-    return not Talented.db.profile.confirmlearn
+    return not self.db.profile.confirmlearn
 end
 
 Talented.options = {
@@ -48,73 +49,76 @@ Talented.options = {
             name = L["Options"],
             desc = L["General Options for Talented."],
             type = "group",
+            order = 1,
             args = {
                 header1 = {
-                    name = L["General options"],
                     type = "header",
+                    name = L["General options"],
                     order = 1
                 },
                 always_edit = {
-                    name = L["Always edit"],
-                    desc = L[
-                        "Always allow templates and the current build to be modified, instead of having to Unlock them first."
-                    ],
                     type = "toggle",
+                    name = L["Always edit"],
+                    desc = L["Always allow templates and the current build to be modified, instead of having to Unlock them first."],
                     arg = "UpdateView",
-                    order = 100
+                    order = 2
                 },
                 confirmlearn = {
+                    type = "toggle",
                     name = L["Confirm Learning"],
                     desc = L["Ask for user confirmation before learning any talent."],
-                    type = "toggle",
-                    order = 200
+                    order = 3
                 },
                 always_call_learn_talents = {
-                    name = L["Always try to learn talent"],
-                    desc = L[
-                        "Always call the underlying API when a user input is made, even when no talent should be learned from it."
-                    ],
                     type = "toggle",
+                    name = L["Always try to learn talent"],
+                    desc = L["Always call the underlying API when a user input is made, even when no talent should be learned from it."],
                     disabled = "MustNotConfirmLearn",
-                    order = 220
+                    order = 4
                 },
                 level_cap = {
+                    type = "toggle",
                     name = L["Talent cap"],
                     desc = L["Restrict templates to a maximum of %d points."]:format(Talented.max_talent_points),
-                    type = "toggle",
                     arg = "UpdateView",
-                    order = 300
+                    order = 5
                 },
                 show_level_req = {
+                    type = "toggle",
                     name = L["Level restriction"],
                     desc = L["Show the required level for the template, instead of the number of points."],
-                    type = "toggle",
                     arg = "UpdateView",
-                    order = 400
+                    order = 6
                 },
                 hook_inspect_ui = {
+                    type = "toggle",
                     name = L["Hook Inspect UI"],
                     desc = L["Hook the Talent Inspection UI."],
-                    type = "toggle",
                     arg = "CheckHookInspectUI",
-                    order = 700
+                    order = 7
                 },
                 show_url_in_chat = {
+                    type = "toggle",
                     name = L["Output URL in Chat"],
                     desc = L["Directly outputs the URL in Chat instead of using a Dialog."],
+                    order = 8
+                },
+                restore_bars = {
                     type = "toggle",
-                    order = 750
+                    name = L["Restore bars with ABS"],
+                    desc = L["If enabled, action bars will be restored automatically after successful respec. Applied template name until first dash is used as parameter (lower case, trailing space removed).\nRequires ABS addon to work."],
+                    order = 9
                 },
                 header2 = {
-                    name = L["Glyph frame options"],
                     type = "header",
-                    order = 769
+                    name = L["Glyph frame options"],
+                    order = 10
                 },
                 glyph_on_talent_swap = {
                     name = L["Glyph frame policy on spec swap"],
                     desc = L["Select the way the glyph frame handle spec swaps."],
                     type = "select",
-                    order = 770,
+                    order = 11,
                     width = "double",
                     values = {
                         keep = L["Keep the shown spec"],
@@ -123,36 +127,36 @@ Talented.options = {
                     }
                 },
                 header3 = {
-                    name = L["Display options"],
                     type = "header",
-                    order = 799
+                    name = L["Display options"],
+                    order = 12
                 },
                 offset = {
+                    type = "range",
                     name = L["Icon offset"],
                     desc = L["Distance between icons."],
-                    type = "range",
+                    arg = "ReLayout",
+                    order = 13,
                     min = 42,
                     max = 64,
-                    step = 1,
-                    order = 800,
-                    arg = "ReLayout"
+                    step = 1
                 },
                 scale = {
+                    type = "range",
                     name = L["Frame scale"],
                     desc = L["Overall scale of the Talented frame."],
-                    type = "range",
+                    arg = "ReLayout",
+                    order = 14,
                     min = 0.5,
                     max = 1.0,
-                    step = 0.01,
-                    order = 900,
-                    arg = "ReLayout"
+                    step = 0.01
                 },
                 add_bottom_offset = {
+                    type = "toggle",
                     name = L["Add bottom offset"],
                     desc = L["Add some space below the talents to show the bottom information."],
-                    type = "toggle",
-                    order = 950,
-                    arg = "ReLayout"
+                    arg = "ReLayout",
+                    order = 15
                 }
             }
         },
@@ -161,6 +165,7 @@ Talented.options = {
             desc = "Apply the specified template",
             type = "input",
             dialogHidden = true,
+            order = 99,
             set = function(_, name)
                 local template = Talented.db.global.templates[name]
                 if not template then

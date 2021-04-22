@@ -280,19 +280,21 @@ do
         UIParent:RegisterEvent("CONFIRM_TALENT_WIPE")
     end
 
-	function Talented:PLAYER_ENTERING_WORLD()
-		if ElvUI then
-			local E = select(1, unpack(ElvUI))
+    function Talented:PLAYER_ENTERING_WORLD()
+        if ElvUI then
+            local E = select(1, unpack(ElvUI))
 
-			-- spec tabs
-			local AS = E:GetModule("AddOnSkins", true)
-			if AS then AS.addons["talented_spectabs"] = 1 end
+            -- spec tabs
+            local AS = E:GetModule("AddOnSkins", true)
+            if AS then
+                AS.addons["talented_spectabs"] = 1
+            end
 
-			-- glyph frame
-			self:CreateGlyphFrame()
-			E.callbacks:Fire("Talented_GlyphFrame")
-		end
-	end
+            -- glyph frame
+            self:CreateGlyphFrame()
+            E.callbacks:Fire("Talented_GlyphFrame")
+        end
+    end
 
     function Talented:PLAYER_TALENT_UPDATE()
         self:UpdatePlayerSpecs()
@@ -2159,6 +2161,15 @@ do
         else
             local cp = GetUnspentTalentPoints(nil, pet, group)
             Talented:Print(L["Template applied successfully, %d talent points remaining."], cp)
+
+            if self.db.profile.restore_bars then
+                local set = template.name:match("[^-]*"):trim():lower()
+                if set and ABS then
+                    ABS:RestoreProfile(set)
+                elseif set and KPack and KPack.ActionBarSaver then
+                    KPack.ActionBarSaver:RestoreProfile(set)
+                end
+            end
         end
         Talented:OpenTemplate(pet and self.pet_current or self:GetActiveSpec())
         Talented:EnableUI(true)
@@ -2231,7 +2242,7 @@ do
         local name = UnitName(unit)
         if not name then return end
         local inspections = self.inspections or {}
-		self.inspections = inspections
+        self.inspections = inspections
         local class = select(2, UnitClass(unit))
         local info = self:UncompressSpellData(class)
         local retval
@@ -2507,7 +2518,7 @@ do
         local code = ExportCode(self:TemplateToString(template))
         FixImportTemplate(self, template)
         if code then
-			url = url or "https://wotlk.evowow.com/?petcalc#%s"
+            url = url or "https://wotlk.evowow.com/?petcalc#%s"
             return url:format(code)
         end
     end
