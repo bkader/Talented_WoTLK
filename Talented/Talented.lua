@@ -2166,8 +2166,8 @@ do
                 local set = template.name:match("[^-]*"):trim():lower()
                 if set and ABS then
                     ABS:RestoreProfile(set)
-                elseif set and KPack and KPack.ActionBarSaver then
-                    KPack.ActionBarSaver:RestoreProfile(set)
+                elseif set and _G.KPack and _G.KPack.ActionBarSaver then
+                    _G.KPack.ActionBarSaver:RestoreProfile(set)
                 end
             end
         end
