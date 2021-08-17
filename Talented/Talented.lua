@@ -287,6 +287,7 @@ do
             -- spec tabs
             local AS = E:GetModule("AddOnSkins", true)
             if AS then
+				AS.addons = {}
                 AS.addons["talented_spectabs"] = 1
             end
 
