@@ -277,15 +277,10 @@ do
 	end
 
 	function Talented:PLAYER_ENTERING_WORLD()
-		if ElvUI then
-			local E = select(1, unpack(ElvUI))
-
+		local E = ElvUI and unpack(ElvUI)
+		if E then
 			-- spec tabs
-			local AS = E:GetModule("AddOnSkins", true)
-			if AS then
-				AS.addons = AS.addons or {}
-				AS.addons["talented_spectabs"] = 1
-			end
+			E.callbacks:Fire("Talented_SpecTabs")
 
 			-- glyph frame
 			self:CreateGlyphFrame()
